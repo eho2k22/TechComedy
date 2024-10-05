@@ -1,0 +1,21 @@
+{
+  "name": "poem-gen",
+  "version": "1.0.0",
+  "description": "Mother's Day Poem Generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "@supabase/supabase-js": "^2.38.0", 
+    "axios": "^1.5.1",
+    "cors": "^2.8.5",
+    "@google-cloud/text-to-speech": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
+  
