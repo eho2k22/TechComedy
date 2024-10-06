@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Input as HeadlessInput, InputProps } from '@headlessui/react'
 
 type Props = InputProps
