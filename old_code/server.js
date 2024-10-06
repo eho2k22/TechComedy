@@ -196,6 +196,12 @@ function prepareComedyText(text) {
 
 }
 
+function prepareComedyScript(text) {
+  // Remove all text enclosed within (), [], and **
+  return text.replace(/[\[\(].*?[\]\)]|\*\*.*?\*\*/g, '');
+}
+
+
 
 app.post('/synthesize-speech', async (req, res) => {
   const { text } = req.body;
@@ -253,7 +259,7 @@ app.post('/synthesize-speech-11labs', async (req, res) => {
   const VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb'; // This is the ID for the "George" voice. Replace with your preferred voice ID.
 
   // Use this function before passing text to ElevenLabs API
-  const preparedText = prepareComedyText(text);
+  const preparedText = prepareComedyScript(text);
 
   try {
     const response = await axios({
