@@ -19,7 +19,7 @@ const generatePoemContent = (topic: string): string => (`Create a funny, humorou
 
 const generateMonologueContent = (topic: string): string => (`Create a funny, humorous and witty monologue using nerdy technology terms and jargons, for a topic titled ${topic}, in 90 to 110 words. Include some comedic pauses and emphasize key punchlines.`);
 
-const generateContent = (topic: string, contentType: ContentType): string => {
+const generateUserContent = (topic: string, contentType: ContentType): string => {
     switch (contentType) {
         case ContentType.Poem:
             return generatePoemContent(topic);
@@ -41,16 +41,17 @@ const generatePrompt = (systemContent: string, userContent: string): IPrompt => 
             {
                 role: "user",
                 content: userContent,
-            }
-        ]
+            },
+        ],
     }
 );
 
 const sendRequest = async (prompt: IPrompt) => {
+    const url = 'https://api.openai.com/v1/chat/completions';
     const method = 'POST';
     const headers = {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     };
     const body = JSON.stringify(prompt);
     const input = {
@@ -60,7 +61,7 @@ const sendRequest = async (prompt: IPrompt) => {
     };
 
     try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', input);
+        const response = await fetch(url, input);
 
         if (!response.ok) throw new Error(`OpenAI API request failed with status ${response.status}`);
 
@@ -80,7 +81,7 @@ const sendRequest = async (prompt: IPrompt) => {
 
 const generateComedy = async (topic: string, contentType: ContentType) => {
     const systemContent = generateSystemContent();
-    const userContent = generateContent(topic, contentType);
+    const userContent = generateUserContent(topic, contentType);
     const prompt = generatePrompt(systemContent, userContent);
     const result = await sendRequest(prompt);
     return result;
