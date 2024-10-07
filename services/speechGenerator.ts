@@ -1,9 +1,6 @@
 import { writeFile } from 'fs/promises'
 
-enum TTSConverter {
-  Google = 'google',
-  ElevenLabs = 'elevenLabs',
-}
+import { TTSConverter } from './interfaces'
 
 import ttsElevenLabs from './ttsElevenLabs'
 import ttsGoogle from './ttsGoogle'

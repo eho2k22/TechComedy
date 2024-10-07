@@ -1,17 +1,4 @@
-interface IMessage {
-  role: 'system' | 'user' | 'assistant'
-  content: string
-}
-
-interface IPrompt {
-  model: string
-  messages: IMessage[]
-}
-
-enum ContentType {
-  Poem = 'poem',
-  Monologue = 'monologue',
-}
+import { IPrompt, ContentType } from './interfaces'
 
 const generateSystemContent = (): string =>
   'You are a creative, humorous, sarcastic comedian poet, expert in composing witty monologues or poems with precise prosody, using common tech terms that reflect the common stereotypes and poke fun at common scenarios in the current tech world.'
