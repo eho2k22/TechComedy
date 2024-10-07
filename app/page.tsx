@@ -1,18 +1,26 @@
 'use client'
 
 import Image from 'next/image'
-import { Heading, Text } from '@/components/primitives'
-
+import {
+  Heading,
+  Text,
+  Container,
+  Content,
+  Backdrop,
+} from '@/components/primitives'
 import { PromptForm } from '@/components/composites'
 
 export default function Home() {
   const onSubmit = (data: any) => console.log(data)
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <Backdrop>
+      <Container>
         <Heading level={1}>Tech Comedy Central</Heading>
         <PromptForm onSubmit={onSubmit} />
+        <Content>
+          Please enter a topic, select a format, and click button Compose.
+        </Content>
         <Text>Happy Prompting, Happy Roasting! from Promptlys !</Text>
         <Image
           className="dark:invert"
@@ -22,7 +30,7 @@ export default function Home() {
           height={64}
           priority
         />
-      </main>
-    </div>
+      </Container>
+    </Backdrop>
   )
 }

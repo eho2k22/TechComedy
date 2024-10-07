@@ -10,7 +10,7 @@ const options = [
 
 interface Inputs {
   topic: string
-  format: ContentType
+  contentType: ContentType
 }
 
 interface Props {
@@ -24,13 +24,13 @@ const PromptForm = ({ onSubmit }: Props) => {
     control,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: { topic: '', format: undefined },
+    defaultValues: { topic: '', contentType: undefined },
   })
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="min-w-80 flex flex-col gap-2"
+      className="min-w-64 w-full flex flex-col gap-2"
     >
       <Input
         {...register('topic', { required: true, maxLength: 32 })}
@@ -39,7 +39,7 @@ const PromptForm = ({ onSubmit }: Props) => {
       />
       <Controller
         control={control}
-        name="format"
+        name="contentType"
         rules={{ required: true }}
         render={({ field: { onChange, value, ref } }) => (
           <Select

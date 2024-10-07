@@ -22,7 +22,7 @@ const Heading = ({ level = 1, children, ...props }: Props) => {
   return (
     <Tag
       className={clsx(
-        'text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight',
+        'text-xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight',
         HEADING_STYLE,
       )}
       {...props}
