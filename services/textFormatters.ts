@@ -1,5 +1,5 @@
 // Remove all text enclosed within (), [], and **
-export const removeBrackets = (text: string) =>
+export const removeBrackets = (text: string): string =>
   text.replace(/[\[\(].*?[\]\)]|\*\*.*?\*\*/g, '')
 
 // Replace special characters with their HTML entities

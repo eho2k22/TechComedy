@@ -1,3 +1,5 @@
+'use server'
+
 import { IPrompt, ContentType } from './interfaces'
 
 const generateSystemContent = (): string =>

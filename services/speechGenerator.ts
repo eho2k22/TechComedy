@@ -1,3 +1,5 @@
+'use server'
+
 import { writeFile } from 'fs/promises'
 
 import { TTSConverter } from './interfaces'
