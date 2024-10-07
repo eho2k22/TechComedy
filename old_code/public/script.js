@@ -162,22 +162,39 @@ document.addEventListener('DOMContentLoaded', function() {
 async function playSpeech(service = 'google') {
     const poemContent = document.getElementById('poemContent').innerText;
     const endpoint = service === 'elevenlabs' ? '/synthesize-speech-11labs' : '/synthesize-speech';
+
+    // 10-6-2024 
+    const loadingIndicator = document.getElementById('audioLoadingIndicator');
+    // Show loading indicator
+    loadingIndicator.classList.remove('hidden');
+
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: poemContent })
-      });
-      const data = await response.json();
-      const audioPlayer = document.getElementById('audioPlayer');
-      audioPlayer.src = data.audioUrl;
-      audioPlayer.style.display = 'block';
-      audioPlayer.play();
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: poemContent })
+        });
+        const data = await response.json();
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.src = data.audioUrl;
+        audioPlayer.style.display = 'block';
+
+        // Hide loading indicator when audio starts playing
+        audioPlayer.onplay = () => {
+            loadingIndicator.classList.add('hidden');
+        };
+        // Hide loading indicator when audio stops playing
+        audioPlayer.onended = () => {
+            loadingIndicator.classList.add('hidden');
+        };
+
+        audioPlayer.play();
     } catch (error) {
-      console.error('Error playing speech:', error);
-      alert('Error playing audio. Please try again.');
+        console.error('Error playing speech:', error);
+        alert('Error playing audio. Please try again.');
+        loadingIndicator.classList.add('hidden'); // Hide indicator on error
     }
   }
 

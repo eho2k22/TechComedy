@@ -261,6 +261,7 @@ app.post('/synthesize-speech-11labs', async (req, res) => {
   // Use this function before passing text to ElevenLabs API
   const preparedText = prepareComedyScript(text);
 
+
   try {
     const response = await axios({
       method: 'post',
@@ -273,9 +274,11 @@ app.post('/synthesize-speech-11labs', async (req, res) => {
       data: {
         text: preparedText,
         model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.5
+        vvoice_settings: {
+          stability: 0.4, // Slightly reduced for more variability
+          similarity_boost: 0.7, // Increased for more expressiveness
+          style: 1.2, // Add style parameter for more energy (values > 1 increase energy)
+          use_speaker_boost: true // This can help with clarity and energy
         }
       },
       responseType: 'arraybuffer'
@@ -289,6 +292,7 @@ app.post('/synthesize-speech-11labs', async (req, res) => {
     const audioFileName = `speech_11labs_${Date.now()}.mp3`;
     await writeFile(`public/${audioFileName}`, response.data, 'binary');
     res.json({ audioUrl: `/${audioFileName}` });
+
   } catch (error) {
     console.error('Error synthesizing speech with ElevenLabs:', error.response?.data || error.message);
     res.status(500).send('Failed to synthesize speech with ElevenLabs');

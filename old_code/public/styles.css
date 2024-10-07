@@ -70,9 +70,6 @@ button:active {
 
 
 
-
-
-
 #poemCard {
     margin-top: 20px;
     padding: 20px;
@@ -147,3 +144,20 @@ button:active {
         font-size: 0.8em; /* Smaller text for footer on mobile */
     }
 }
+
+/* 10-6-20224 audio_loading indicator */
+
+.audio-loading {
+    font-size: 24px;
+    animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  .hidden {
+    display: none;
+  }

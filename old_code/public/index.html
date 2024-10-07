@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Silicon Comedy Central </title>
+<title> Tech Comedy Central </title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="icon" type="image/png" href="https://msfpfmwdawonueqaevru.supabase.co/storage/v1/object/public/img/promptlys-150.png">
@@ -67,8 +67,14 @@
         </div>
 
         <!-- Insert the new elements here -->
-        <button id="playButton" onclick="playSpeech()" style="display:none;">🎸Play!</button>
-        <button id="playButtonPro" onclick="playSpeech('elevenlabs')" style="display:none;">🎸🎸Play! (Pro) </button>
+        <!--button id="playButton" onclick="playSpeech()" style="display:none;">🎸Play!</button>
+        <button id="playButtonPro" onclick="playSpeech('elevenlabs')" style="display:none;">🎸🎸Play! (Pro) </button-->
+        <!-- playButtons display with audio loading indicator-->
+        <div class="play-buttons">
+            <button id="playButton" onclick="playSpeech()" style="display:none;">🎸 Play </button>
+            <button id="playButtonPro" onclick="playSpeech('elevenlabs')" style="display:none;">🎸🎸 Play (Pro)</button>
+            <div id="audioLoadingIndicator" class="audio-loading hidden" aria-live="polite" aria-label="Loading audio">🎵</div>
+        </div>
         <audio id="audioPlayer" style="display:none;"></audio>
         <!-- End of new elements -->
         <br>
