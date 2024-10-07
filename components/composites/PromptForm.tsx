@@ -23,12 +23,14 @@ const PromptForm = ({ onSubmit }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<Inputs>()
+  } = useForm<Inputs>({
+    defaultValues: { topic: '', format: undefined },
+  })
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="min-w-96 flex flex-col gap-1"
+      className="min-w-80 flex flex-col gap-2"
     >
       <Input
         {...register('topic', { required: true, maxLength: 32 })}
@@ -38,8 +40,10 @@ const PromptForm = ({ onSubmit }: Props) => {
       <Controller
         control={control}
         name="format"
-        render={({ field: { onChange, onBlur, value, ref } }) => (
+        rules={{ required: true }}
+        render={({ field: { onChange, value, ref } }) => (
           <Select
+            ref={ref}
             onChange={(value) => onChange(value)}
             value={value}
             options={options}
