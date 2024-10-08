@@ -8,8 +8,8 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: 'Silicon Comady Central',
-  description: 'Silicon Comady Central',
+  title: 'Tech Comady Central',
+  description: 'Tech Comady Central',
 }
 
 export default function RootLayout({

@@ -4,14 +4,19 @@ import Image from 'next/image'
 import {
   Heading,
   Text,
+  Footer,
   Container,
   Content,
   Backdrop,
 } from '@/components/primitives'
 import { PromptForm } from '@/components/composites'
 
-export default function Home() {
-  const onSubmit = (data: any) => console.log(data)
+import { useTextGenerator } from '@/hooks'
+
+const Home = () => {
+  const { message, onSubmit } = useTextGenerator()
+  const defaultMessage =
+    'Please enter a topic, select a format, and click button Compose.'
 
   return (
     <Backdrop>
@@ -19,9 +24,10 @@ export default function Home() {
         <Heading level={1}>Tech Comedy Central</Heading>
         <PromptForm onSubmit={onSubmit} />
         <Content>
-          Please enter a topic, select a format, and click button Compose.
+          {message && <Text>{message}</Text>}
+          {!message && <Text>{defaultMessage}</Text>}
         </Content>
-        <Text>Happy Prompting, Happy Roasting! from Promptlys !</Text>
+        <Footer>Happy Prompting, Happy Roasting! from Promptlys !</Footer>
         <Image
           className="dark:invert"
           src="https://msfpfmwdawonueqaevru.supabase.co/storage/v1/object/public/img/promptlys-150.png"
@@ -34,3 +40,5 @@ export default function Home() {
     </Backdrop>
   )
 }
+
+export default Home
