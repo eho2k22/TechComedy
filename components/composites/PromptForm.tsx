@@ -1,20 +1,17 @@
+'use client'
+
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { Button, Input, Select } from '@/components/primitives'
 
-import { ContentType } from '@/services'
+import { ContentType, type ITextGeneratorInput } from '@/services'
 
 const options = [
   { value: ContentType.Poem, label: 'Poem' },
   { value: ContentType.Monologue, label: 'Monologue' },
 ]
 
-interface Inputs {
-  topic: string
-  contentType: ContentType
-}
-
 interface Props {
-  onSubmit: SubmitHandler<Inputs>
+  onSubmit: SubmitHandler<ITextGeneratorInput>
 }
 
 const PromptForm = ({ onSubmit }: Props) => {
@@ -23,8 +20,8 @@ const PromptForm = ({ onSubmit }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: { topic: '', contentType: undefined },
+  } = useForm<ITextGeneratorInput>({
+    defaultValues: { topic: '', contentType: '' as ContentType },
   })
 
   return (
