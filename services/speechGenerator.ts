@@ -2,7 +2,7 @@
 
 import { writeFile } from 'fs/promises'
 
-import { TTSConverter } from './interfaces'
+import { TTSConverter, ISpeechGeneratorOutput } from './interfaces'
 
 import ttsElevenLabs from './ttsElevenLabs'
 import ttsGoogle from './ttsGoogle'
@@ -36,7 +36,7 @@ const convertTextToSpeech = async (text: string, converter: TTSConverter) => {
   }
 }
 
-const generateSpeech = async (text: string, converter: TTSConverter) => {
+const generateSpeech = async (text: string, converter: TTSConverter): Promise<ISpeechGeneratorOutput> => {
   try {
     const file = convertTextToSpeech(text, converter)
     const result = saveFile(converter, file)

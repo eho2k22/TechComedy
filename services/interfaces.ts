@@ -27,3 +27,13 @@ export interface ITextGeneratorOutput {
   content?: string
   error?: string
 }
+
+export interface ISpeechGeneratorInput {
+  text: string
+  converter: TTSConverter
+}
+
+export interface ISpeechGeneratorOutput {
+  audioUrl?: string
+  error?: string
+}
