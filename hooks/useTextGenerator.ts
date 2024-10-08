@@ -4,8 +4,8 @@ import { generateText, type ITextGeneratorInput } from '@/services'
 const useTextGenerator = () => {
   const [message, setMessage] = useState<string | null>(null)
 
-  const onSubmit = async (data: ITextGeneratorInput) => {
-    const { topic, contentType } = data
+  const generateMessage = async (input: ITextGeneratorInput) => {
+    const { topic, contentType } = input
     const result = await generateText(topic, contentType)
     const { content, error } = result
     if (content) setMessage(content)
@@ -16,7 +16,7 @@ const useTextGenerator = () => {
 
   return {
     message,
-    onSubmit,
+    generateMessage,
   }
 }
 
