@@ -17,3 +17,13 @@ export interface IPrompt {
   model: string
   messages: IMessage[]
 }
+
+export interface ITextGeneratorInput {
+  topic: string
+  contentType: ContentType
+}
+
+export interface ITextGeneratorOutput {
+  content?: string
+  error?: string
+}

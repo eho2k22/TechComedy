@@ -1,6 +1,6 @@
 'use server'
 
-import { IPrompt, ContentType } from './interfaces'
+import { IPrompt, ContentType, ITextGeneratorOutput } from './interfaces'
 
 const generateSystemContent = (): string =>
   'You are a creative, humorous, sarcastic comedian poet, expert in composing witty monologues or poems with precise prosody, using common tech terms that reflect the common stereotypes and poke fun at common scenarios in the current tech world.'
@@ -42,7 +42,7 @@ const generatePrompt = (
   ],
 })
 
-const sendRequest = async (prompt: IPrompt) => {
+const sendRequest = async (prompt: IPrompt): Promise<ITextGeneratorOutput> => {
   const url = 'https://api.openai.com/v1/chat/completions'
   const method = 'POST'
   const headers = {
@@ -72,7 +72,7 @@ const sendRequest = async (prompt: IPrompt) => {
       result.choices.length > 0 &&
       result.choices[0].message
     ) {
-      return { poem: result.choices[0].message.content }
+      return { content: result.choices[0].message.content }
     } else {
       throw new Error('Invalid response structure from OpenAI')
     }
@@ -85,7 +85,10 @@ const sendRequest = async (prompt: IPrompt) => {
   }
 }
 
-const generateComedy = async (topic: string, contentType: ContentType) => {
+const generateText = async (
+  topic: string,
+  contentType: ContentType,
+): Promise<ITextGeneratorOutput> => {
   const systemContent = generateSystemContent()
   const userContent = generateUserContent(topic, contentType)
   const prompt = generatePrompt(systemContent, userContent)
@@ -93,4 +96,4 @@ const generateComedy = async (topic: string, contentType: ContentType) => {
   return result
 }
 
-export default generateComedy
+export default generateText

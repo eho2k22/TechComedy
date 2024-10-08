@@ -6,6 +6,7 @@ import { TTSConverter } from './interfaces'
 
 import ttsElevenLabs from './ttsElevenLabs'
 import ttsGoogle from './ttsGoogle'
+
 import {
   removeBrackets,
   replaceSpecialChars,
@@ -35,7 +36,7 @@ const convertTextToSpeech = async (text: string, converter: TTSConverter) => {
   }
 }
 
-const synthesizeSpeach = async (text: string, converter: TTSConverter) => {
+const generateSpeech = async (text: string, converter: TTSConverter) => {
   try {
     const file = convertTextToSpeech(text, converter)
     const result = saveFile(converter, file)
@@ -49,4 +50,4 @@ const synthesizeSpeach = async (text: string, converter: TTSConverter) => {
   }
 }
 
-export default synthesizeSpeach
+export default generateSpeech
