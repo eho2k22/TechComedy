@@ -37,64 +37,16 @@ function initializeSupabase(url, key) {
 
 
 
-// This function checks for 'topicName' parameter in the URL and auto-fills the mother's name input
+// This function checks for 'topicName' parameter in the URL and auto-fills the topic
 function checkForAutoFill() {
     const params = new URLSearchParams(window.location.search);
     const topicNameFromQuery = params.get('topicName');
     if (topicNameFromQuery) {
         document.getElementById('topicName').value = topicNameFromQuery;
-        generatePoem(); // Automatically generate the poem if the mother's name is passed in URL
+        generatePoem(); // Automatically generate the poem if the topic is passed in URL
     }
 }
 
-
-async function generatePoem_old() {
-    const topicNameElement = document.getElementById('topicName');
-    const heartIcon = document.getElementById('heart');
-    const poemTitle = document.getElementById('poemTitle');
-    const poemContent = document.getElementById('poemContent');
-    const poemCard = document.getElementById('poemCard');
-    
-    if (!topicNameElement || !heartIcon || !poemTitle || !poemContent || !poemCard) {
-        console.error('One or more elements are missing.');
-        return;  // Exit if elements are not found
-    }
-
-    var topicName = topicNameElement.value.trim();
-    if (topicName === "") {
-        alert("Please enter your topic");
-        return;
-    }
-
-    heartIcon.classList.remove('hidden'); // Show the heart icon
-
-    try {
-        const response = await fetch('/generate-poem', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: topicName })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch poem');
-        }
-
-        const data = await response.json();
-        //poemTitle.innerText = "Sketch for " + topicName; // Update title with name
-        poemTitle.innerText = topicName; // Update title with name
-        poemContent.innerText = data.poem;
-        poemCard.classList.remove('hidden');
-        // 10-1-2024 
-        document.getElementById('playButton').style.display = 'block'; // Show play button
-        heartIcon.classList.add('hidden'); // Hide the heart icon after poem is displayed
-    } catch (error) {
-        console.error('Error:', error);
-        //alert('Error generating poem. Please try again.');
-        heartIcon.classList.add('hidden'); // Ensure heart icon is hidden on error
-    }
-}
 
 async function generatePoem() {
     const topicNameElement = document.getElementById('topicName');
@@ -120,7 +72,7 @@ async function generatePoem() {
     heartIcon.classList.remove('hidden'); // Show the heart icon
 
     try {
-        const response = await fetch('/generate-poem', {
+        const response = await fetch('/generate-poem-v2', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -141,6 +93,7 @@ async function generatePoem() {
         poemCard.classList.remove('hidden');
         document.getElementById('playButton').style.display = 'block'; // Show play button
         document.getElementById('playButtonPro').style.display = 'block'; // Show playPro button
+        document.getElementById('playButtonStream').style.display = 'block'; // Show playStream button
         heartIcon.classList.add('hidden'); // Hide the heart icon after content is displayed
     } catch (error) {
         console.error('Error:', error);
@@ -154,9 +107,60 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('composeButton').addEventListener('click', generatePoem);
 });
 
+//10-7-2024 Playback Streaming 
+
+async function playStreamingSpeech() {
+    const poemContent = document.getElementById('poemContent').innerText;
+    const loadingIndicator = document.getElementById('audioLoadingIndicator');
+    loadingIndicator.classList.remove('hidden');
+
+    try {
+        const response = await fetch('/synthesize-speech-11labs-stream', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: poemContent })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
+        }
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createBufferSource();
+
+        const reader = response.body.getReader();
+        const chunks = [];
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+        }
+
+        const audioData = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+        let offset = 0;
+        for (const chunk of chunks) {
+            audioData.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        const audioBuffer = await audioContext.decodeAudioData(audioData.buffer);
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+
+        loadingIndicator.classList.add('hidden');
+        source.start(0);
+    } catch (error) {
+        console.error('Error streaming speech:', error);
+        alert(`Error streaming audio: ${error.message}`);
+        loadingIndicator.classList.add('hidden');
+    }
+}
 
 // 10-1-2024 Google TTS Play the poem (comedy script) as speech
-
 // 10-5-2024 Enhanced to support multiple TTS endpoints (11Labs)
 
 async function playSpeech(service = 'google') {
