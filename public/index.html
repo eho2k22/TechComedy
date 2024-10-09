@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Tech Comedy Central </title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/png" href="https://msfpfmwdawonueqaevru.supabase.co/storage/v1/object/public/img/promptlys-150.png">
+<style>
+    /* Add this to match the dropdown style with the input box */
+    #contentType {
+        display: inline-block;
+        width: 10em !important;/* Set width to approximately 10 characters */
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    label {
+        margin-bottom: 5px; /* Space between label and dropdown */
+        font-weight: bold; /* Make label text bold */
+    }
+    .dropdown-container {
+        display: flex;
+        flex-direction: column; /* Stack label and dropdown vertically */
+        align-items: center; /* Center align items */
+        margin-top: 10px; /* Space between elements */
+    }
+
+    .label {
+        margin-bottom: 5px; /* Space between label and dropdown */
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Center align the button */
+        margin-top: 20px; /* Space above the button */
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <h1> Tech Comedy Central (v2) </h1>
+        <input type="text" id="topicName" placeholder="Enter Topic here" autofocus>
+        <!-- New dropdown input field -->
+        <div class="dropdown-container">
+            <label class="label" for="contentType"> Format:</label>
+            <select id="contentType">
+                <option value="poem" selected>Poem</option>
+                <option value="monologue">Monologue</option>
+            </select>
+        </div>
+        <button id="composeButton" onclick="generatePoem()">Compose</button>
+        <div id="heart" class="heart hidden"></div>
+        <h2 id="poemTitle"><span id="nameDisplay"></span></h2> <!-- Moved outside of poemCard -->
+        <!--div id="poemCard" class="hidden">
+            <p id="poemContent"></p>
+        </div-->
+        <div id="poemCard">
+            <!--h2 id="poemTitle">Your personalized poem will appear here...</h2-->
+            <p id="poemContent"><i>Please enter a topic, select a format,  and click button Compose.</i></p>
+        </div>
+
+        <!-- Insert the new elements here -->
+        <!--button id="playButton" onclick="playSpeech()" style="display:none;">🎸Play!</button>
+        <button id="playButtonPro" onclick="playSpeech('elevenlabs')" style="display:none;">🎸🎸Play! (Pro) </button-->
+        <!-- playButtons display with audio loading indicator-->
+        <div class="play-buttons">
+            <button id="playButton" onclick="playSpeech()" style="display:none;">🎸 Play </button>
+            <button id="playButtonPro" onclick="playSpeech('elevenlabs')" style="display:none;">🎸🎸 Play (Pro)</button>
+            <button id="playButtonStream" onclick="playStreamingSpeech()" style="display:none;">🎸🎸 Play (Streaming)</button>
+            <div id="audioLoadingIndicator" class="audio-loading hidden" aria-live="polite" aria-label="Loading audio">🎛️</div>
+        </div>
+        <audio id="audioPlayer" style="display:none;"></audio>
+        <!-- End of new elements -->
+        <br>
+        <br>
+        <br>
+        <footer class="footer">
+            <p> Happy Prompting, Happy Roasting!  from Promptlys !</p>
+            <a href="https://demo.promptlys.ai" target="_blank">
+                <img src="https://msfpfmwdawonueqaevru.supabase.co/storage/v1/object/public/img/promptlys-150.png" alt="Promptlys Logo" style="width: 100px;">
+            </a>
+        </footer>
+    </div>
+
+<!-- 10/1/2024  Add this before your script.js -->
+<script src="https://unpkg.com/@humeai/voice@1.0.0/dist/index.umd.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+
+

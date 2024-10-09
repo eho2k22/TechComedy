@@ -1,0 +1,19 @@
+runtime: nodejs18  # Specify the Node.js version
+env: standard
+env_variables:
+  PORT: 8080
+  SUPABASE_URL: ""
+  SUPABASE_KEY: ""
+  OPENAI_KEY: ""
+  OPENAI_API_KEY: ""
+  ELEVENLABS_API_KEY: ""
+
+handlers:
+- url: /.*
+  script: auto
+  secure: always
+
+automatic_scaling:
+  target_cpu_utilization: 0.6
+  min_instances: 1
+  max_instances: 3
