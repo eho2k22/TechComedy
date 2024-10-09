@@ -14,7 +14,13 @@
   ];
 
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+    SUPABASE_URL = "https://msfpfmwdawonueqaevru.supabase.co";
+    OPENAI_API_KEY = "OPENAI_API_KEY";
+    ELEVENLABS_API_KEY = "ELEVENLABS_API_KEY";
+    SUPABASE_KEY = "SUPABASE_KEY";
+    KINDO_AI_KEY = "KINDO_AI_KEY";
+  };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
