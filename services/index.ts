@@ -4,7 +4,6 @@ export {
   ContentType,
   TTSConverter,
   type ITextGeneratorInput,
-  type ITextGeneratorOutput,
   type ISpeechGeneratorInput,
   type ISpeechGeneratorOutput,
 } from './interfaces'

@@ -1,63 +1,15 @@
 'use client'
 
-import Image from 'next/image'
-import {
-  Heading,
-  Text,
-  Footer,
-  Container,
-  Content,
-  Backdrop,
-  Button,
-} from '@/components/primitives'
-import { PromptForm } from '@/components/composites'
+import { ComedyPage } from '@/components/custom'
 
-import { useTextGenerator, useSpeachGenerator } from '@/hooks'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const Home = () => {
-  const { message, generateMessage } = useTextGenerator()
-  const { audioUrl, generateAudio, generateAudioPro } = useSpeachGenerator()
+const queryClient = new QueryClient()
 
-  if (audioUrl) {
-    const audio = new Audio(audioUrl)
-    audio.play()
-  }
-
-  const defaultMessage =
-    'Please enter a topic, select a format, and click button Compose.'
-
-  console.log('Home message:', message)
-  console.log('Home audioUrl:', audioUrl)
-
-  return (
-    <Backdrop>
-      <Container>
-        <Heading level={1}>Tech Comedy Central</Heading>
-        <PromptForm onSubmit={generateMessage} />
-        <Content>
-          {!message && <Text>{defaultMessage}</Text>}
-          {message && <Text>{message}</Text>}
-          {message && (
-            <Button onClick={() => generateAudio(message)}>🎸 Play</Button>
-          )}
-          {message && (
-            <Button onClick={() => generateAudioPro(message)}>
-              🎸🎸 Play (Pro)
-            </Button>
-          )}
-        </Content>
-        <Footer>Happy Prompting, Happy Roasting! from Promptlys !</Footer>
-        <Image
-          className="dark:invert"
-          src="https://msfpfmwdawonueqaevru.supabase.co/storage/v1/object/public/img/promptlys-150.png"
-          alt="Promptlys logo"
-          width={64}
-          height={64}
-          priority
-        />
-      </Container>
-    </Backdrop>
-  )
-}
+const Home = () => (
+  <QueryClientProvider client={queryClient}>
+    <ComedyPage />
+  </QueryClientProvider>
+)
 
 export default Home

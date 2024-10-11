@@ -9,23 +9,13 @@ export enum ContentType {
 }
 
 export interface IMessage {
-  role: 'system' | 'user' | 'assistant'
+  role: 'user' | 'assistant'
   content: string
-}
-
-export interface IPrompt {
-  model: string
-  messages: IMessage[]
 }
 
 export interface ITextGeneratorInput {
   topic: string
   contentType: ContentType
-}
-
-export interface ITextGeneratorOutput {
-  content?: string
-  error?: string
 }
 
 export interface ISpeechGeneratorInput {

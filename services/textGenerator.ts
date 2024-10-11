@@ -1,9 +1,8 @@
 'use server'
+import OpenAI from 'openai'
+import { ContentType, IMessage } from './interfaces'
 
-import { IPrompt, ContentType, ITextGeneratorOutput } from './interfaces'
-
-const generateSystemContent = (): string =>
-  'You are a creative, humorous, sarcastic comedian poet, expert in composing witty monologues or poems with precise prosody, using common tech terms that reflect the common stereotypes and poke fun at common scenarios in the current tech world.'
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 const generatePoemContent = (topic: string): string =>
   `Create a funny, humorous and witty poem with catchy punchlines using nerdy technology terms and jargons that rhyme, for a topic titled ${topic}, in 80 to 100  words`
@@ -25,74 +24,49 @@ const generateUserContent = (
   }
 }
 
-const generatePrompt = (
-  systemContent: string,
-  userContent: string,
-): IPrompt => ({
-  model: 'gpt-4',
-  messages: [
-    {
-      role: 'system',
-      content: systemContent,
-    },
-    {
-      role: 'user',
-      content: userContent,
-    },
-  ],
+const generateMessage = (userContent: string): IMessage => ({
+  role: 'user',
+  content: userContent,
 })
 
-const sendRequest = async (prompt: IPrompt): Promise<ITextGeneratorOutput> => {
-  const url = 'https://api.openai.com/v1/chat/completions'
-  const method = 'POST'
-  const headers = {
-    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    'Content-Type': 'application/json',
-  }
-  const body = JSON.stringify(prompt)
-  const input = {
-    method,
-    headers,
-    body,
-  }
-
-  try {
-    const response = await fetch(url, input)
-
-    if (!response.ok)
-      throw new Error(
-        `OpenAI API request failed with status ${response.status}`,
-      )
-
-    const result = await response.json()
-    console.log('OpenAI response:', result)
-
-    if (
-      result.choices &&
-      result.choices.length > 0 &&
-      result.choices[0].message
-    ) {
-      return { content: result.choices[0].message.content }
-    } else {
-      throw new Error('Invalid response structure from OpenAI')
-    }
-  } catch (error: any) {
-    console.error(
-      'Error details:',
-      error.response ? error.response.data : error.message,
+const getLastAssistantTextMessage = async (threadId: string) => {
+  const messages = await openai.beta.threads.messages.list(threadId)
+  const assistantMessages = messages.data.filter(
+    (message) => message.role === 'assistant',
+  )
+  const lastAssistantMessage = assistantMessages.pop()
+  if (lastAssistantMessage?.content[0].type !== 'text') {
+    throw new Error(
+      `Last message is not text. Message type: ${lastAssistantMessage?.content[0].type}`,
     )
-    return { error: 'Failed to generate content' }
   }
+  return lastAssistantMessage.content[0].text.value
+}
+
+const sendRequest = async (message: IMessage): Promise<string> => {
+  if (!process.env.ASSISTANT_ID) {
+    throw new Error('Missing Assistant ID')
+  }
+
+  const assistant = { assistant_id: process.env.ASSISTANT_ID }
+  const thread = await openai.beta.threads.create({ messages: [message] })
+  const run = await openai.beta.threads.runs.createAndPoll(thread.id, assistant)
+
+  if (run.status !== 'completed') {
+    throw new Error(`Run status is not completed. Status: ${run.status}`)
+  }
+
+  const content = await getLastAssistantTextMessage(thread.id)
+  return content
 }
 
 const generateText = async (
   topic: string,
   contentType: ContentType,
-): Promise<ITextGeneratorOutput> => {
-  const systemContent = generateSystemContent()
+): Promise<string> => {
   const userContent = generateUserContent(topic, contentType)
-  const prompt = generatePrompt(systemContent, userContent)
-  const result = await sendRequest(prompt)
+  const message = generateMessage(userContent)
+  const result = await sendRequest(message)
   return result
 }
 
